@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"log"
+	"os"
 	"time"
 
 	empty "github.com/golang/protobuf/ptypes/empty"
@@ -12,11 +13,16 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
-const (
+var (
 	address = "localhost:50051"
 )
 
 func main() {
+
+	serverAddress := os.Getenv("SERVER_ADDRESS")
+	if serverAddress != "" {
+		address = serverAddress
+	}
 
 	config := &tls.Config{
 		InsecureSkipVerify: true,
@@ -29,11 +35,14 @@ func main() {
 	defer conn.Close()
 
 	client := pb.NewSomeServiceClient(conn)
-	resp, err := client.Perform(context.Background(), &empty.Empty{})
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
 
-	timeStamp := time.Unix(resp.Timestamp.GetSeconds(), int64(resp.Timestamp.GetNanos()))
-	log.Println(timeStamp)
+	for {
+		resp, err := client.Perform(context.Background(), &empty.Empty{})
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+		timeStamp := time.Unix(resp.Timestamp.GetSeconds(), int64(resp.Timestamp.GetNanos()))
+		log.Println(timeStamp)
+		<-time.After(1 * time.Second)
+	}
 }
