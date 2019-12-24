@@ -52,6 +52,6 @@ spec:
       containers:
       - name: dummy-grpc-clock-client
         image: szaqal/dummy-grpc-clock-client:latest
-      env:
-      - name: SERVER_ADDRESS
-        value: "dumm-grpc-clock-server.svc.cluster.local"
+        env:
+        - name: SERVER_ADDRESS
+          value: "dumm-grpc-clock-server.svc.cluster.local"
