@@ -54,4 +54,4 @@ spec:
         image: szaqal/dummy-grpc-clock-client:latest
         env:
         - name: SERVER_ADDRESS
-          value: "dumm-grpc-clock-server.svc.cluster.local"
+          value: "dummy-grpc-clock-server.svc.cluster.local:50051"
