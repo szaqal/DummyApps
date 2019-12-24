@@ -22,8 +22,11 @@ type server struct {
 }
 
 func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.TimeResponse, error) {
+	now := time.Now()
 
-	resp := &pb.TimeResponse{Timestamp: &timestamp.Timestamp{Seconds: time.Now().UnixNano()}}
+	timeStampVal := &timestamp.Timestamp{Seconds: now.Unix(), Nanos: int32(now.Nanosecond())}
+
+	resp := &pb.TimeResponse{Timestamp: timeStampVal}
 	return resp, nil
 }
 

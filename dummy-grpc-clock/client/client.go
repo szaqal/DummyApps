@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"log"
+	"time"
 
 	empty "github.com/golang/protobuf/ptypes/empty"
 	pb "github.com/szaqal/DummyApps/dummy-grpc-clock/service"
@@ -32,5 +33,7 @@ func main() {
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
-	log.Println(resp)
+
+	timeStamp := time.Unix(resp.Timestamp.GetSeconds(), int64(resp.Timestamp.GetNanos()))
+	log.Println(timeStamp)
 }
