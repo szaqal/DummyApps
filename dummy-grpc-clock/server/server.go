@@ -26,6 +26,7 @@ func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.TimeResp
 	timeStampVal := &timestamp.Timestamp{Seconds: time.Now().Unix(), Nanos: int32(time.Now().Nanosecond())}
 
 	resp := &pb.TimeResponse{Timestamp: timeStampVal}
+	log.Println("Request Served")
 	return resp, nil
 }
 

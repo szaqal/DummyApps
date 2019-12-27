@@ -16,6 +16,7 @@ spec:
       containers:
       - name: dummy-grpc-clock-server
         image: szaqal/dummy-grpc-clock-server:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 50051
 ---
@@ -52,6 +53,7 @@ spec:
       containers:
       - name: dummy-grpc-clock-client
         image: szaqal/dummy-grpc-clock-client:latest
+        imagePullPolicy: Always
         env:
         - name: SERVER_ADDRESS
           value: "dummy-grpc-clock-server.default.svc.cluster.local:50051"
