@@ -10,7 +10,7 @@ spec:
   - port:
       number: 31400
       name: tcp
-      protocol: TCP
+      protocol: GRPC
     hosts:
     - "*"
 ---
