@@ -15,5 +15,6 @@ spec:
       containers:
       - name: dummy-http
         image: szaqal/dummy-http:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
