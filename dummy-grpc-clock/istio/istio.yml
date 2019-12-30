@@ -1,0 +1,33 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: dummy-grpc-clock-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 50051
+      name: tcp
+      protocol: TCP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dummy-grpc-clock-server
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - dummy-grpc-clock-gateway
+  tcp:
+  - match:
+    - port: 31400
+    route:
+    - destination:
+        host: dummy-grpc-clock-server
+        port:
+          number: 50051

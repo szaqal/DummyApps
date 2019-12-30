@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-grpc-clock-server
+spec:
+  selector:
+    matchLabels:
+     app: dummy-grpc-clock-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dummy-grpc-clock-server
+    spec:
+      containers:
+      - name: dummy-grpc-clock-server
+        image: szaqal/dummy-grpc-clock-server:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 50051
