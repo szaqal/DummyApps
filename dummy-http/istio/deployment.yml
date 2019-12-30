@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-http
+spec:
+  selector:
+    matchLabels:
+     app: dummy-http
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dummy-http
+    spec:
+      containers:
+      - name: dummy-http
+        image: szaqal/dummy-http:latest
+        ports:
+        - containerPort: 80
