@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
      app: dummy-http
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
