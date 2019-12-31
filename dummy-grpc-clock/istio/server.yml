@@ -32,6 +32,6 @@ spec:
   selector:
     app: dummy-grpc-clock-server
   ports:
-  - port: 50051
+  - name: tcp
+    port: 50051
     targetPort: 50051
-    protocol: TCP
