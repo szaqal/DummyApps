@@ -23,7 +23,7 @@ func main() {
 		}
 		body, err := ioutil.ReadAll(resp.Body)
 		defer resp.Body.Close()
-		log.Printf(" HTTP: %d | %s", resp.StatusCode, body)
+		log.Printf(">> HTTP: %d | %s", resp.StatusCode, body)
 		<-time.After(1 * time.Second)
 	}
 
