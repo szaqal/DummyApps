@@ -27,9 +27,9 @@ spec:
   selector:
     app: dummy-http
   ports:
-  - port: 80
+  - name: http
+    port: 80
     targetPort: 80
-    protocol: TCP        
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -58,4 +58,4 @@ spec:
   http:
   - route:
     - destination:
-        host: dummy-http
+        host: dummy-http.default.svc.cluster.local
