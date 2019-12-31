@@ -28,7 +28,16 @@ func main() {
 		InsecureSkipVerify: true,
 	}
 
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(credentials.NewTLS(config)))
+	var dialOption grpc.DialOption = nil
+	if os.Getenv("USE_TLS") == "true" {
+		log.Println("GRPC with TLS")
+		dialOption = grpc.WithTransportCredentials(credentials.NewTLS(config))
+	} else {
+		log.Println("GRPC without TLS")
+		dialOption = grpc.WithInsecure()
+	}
+
+	conn, err := grpc.Dial(address, dialOption)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}

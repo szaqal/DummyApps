@@ -18,5 +18,7 @@ spec:
         image: szaqal/dummy-grpc-clock-client:latest
         imagePullPolicy: Always
         env:
+        - name: USE_TLS
+          value: "false"          
         - name: SERVER_ADDRESS
           value: "dummy-grpc-clock-server.default.svc.cluster.local:50051"
