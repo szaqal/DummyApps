@@ -4,3 +4,4 @@ dummy-grpc-clock/client/client
 dummy-grpc-clock/server/server
 dummy-grpc-clock/client/dummy-grpc-clock-client
 dummy-grpc-clock/server/dummy-grpc-clock-server
+dummy-http-client/dummy-http-client

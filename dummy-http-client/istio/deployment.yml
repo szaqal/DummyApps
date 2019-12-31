@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dummy-http
+  name: dummy-http-client
 spec:
   selector:
     matchLabels:
-     app: dummy-http
+     app: dummy-http-client
   replicas: 2
   template:
     metadata:
       labels:
-        app: dummy-http
+        app: dummy-http-client
     spec:
       containers:
-      - name: dummy-http
-        image: szaqal/dummy-http:latest
+      - name: dummy-http-client
+        image: szaqal/dummy-http-client:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
