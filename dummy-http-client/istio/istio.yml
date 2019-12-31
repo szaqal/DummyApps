@@ -1,0 +1,32 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: dummy-http-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: tcp
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: dummy-http-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - dummy-http-gateway
+  http:
+  - timeout: 5s
+    route:
+    - destination:
+        host: dummy-http-client
+        port:
+          number: 80

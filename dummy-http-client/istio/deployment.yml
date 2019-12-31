@@ -18,4 +18,4 @@ spec:
         imagePullPolicy: Always
         env:
         - name: SERVER_ADDRESS
-          value: "http://dummy-http.default.svc.cluster.local"
+          value: "http://istio-ingressgateway.istio-system.svc.cluster.local"
