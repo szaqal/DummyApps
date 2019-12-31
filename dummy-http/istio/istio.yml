@@ -26,4 +26,4 @@ spec:
   http:
   - route:
     - destination:
-        host: dummy-http-server
+        host: dummy-http
