@@ -19,3 +19,15 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 50051
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dummy-grpc-clock-server
+spec:
+  selector:
+    app: dummy-grpc-clock-server
+  ports:
+  - port: 50051
+    targetPort: 50051
+    protocol: TCP
