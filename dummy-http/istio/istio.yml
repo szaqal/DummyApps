@@ -1,3 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummy-http
+spec:
+  selector:
+    matchLabels:
+     app: dummy-http
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: dummy-http
+    spec:
+      containers:
+      - name: dummy-http
+        image: szaqal/dummy-http:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dummy-http
+spec:
+  selector:
+    app: dummy-http
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 31080
+    protocol: TCP        
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -17,7 +51,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: dummy-http-server
+  name: dummy-http
 spec:
   hosts:
   - "*"
