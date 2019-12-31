@@ -21,4 +21,4 @@ spec:
         - name: USE_TLS
           value: "false"          
         - name: SERVER_ADDRESS
-          value: "dummy-grpc-clock-server.default.svc.cluster.local:50051"
+          value: "istio-ingressgateway.istio-system.svc.cluster.local:31400"
