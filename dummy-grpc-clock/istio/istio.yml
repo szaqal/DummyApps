@@ -10,7 +10,7 @@ spec:
   - port:
       number: 31400
       name: tcp
-      protocol: GRPC
+      protocol: TCP
     hosts:
     - "*"
 ---
@@ -25,9 +25,9 @@ spec:
   - dummy-grpc-clock-gateway
   tcp:
   - match:
-    - port: 50051
+    - port: 31400
     route:
     - destination:
-        host: dummy-grpc-clock-server
+        host: dummy-grpc-clock-server.default.svc.cluster.local
         port:
           number: 50051
