@@ -25,7 +25,7 @@ spec:
   - dummy-grpc-clock-gateway
   tcp:
   - match:
-    - port: 31400
+    - port: 50051
     route:
     - destination:
         host: dummy-grpc-clock-server

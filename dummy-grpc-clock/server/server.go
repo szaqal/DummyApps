@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"os"
 	"time"
 
 	empty "github.com/golang/protobuf/ptypes/empty"
@@ -31,15 +32,23 @@ func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.TimeResp
 }
 
 func main() {
-	creds, err := credentials.NewServerTLSFromFile("service.pem", "service.key")
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	// Creates a new gRPC server
-	s := grpc.NewServer(grpc.Creds(creds))
 
-	pb.RegisterSomeServiceServer(s, &server{})
+	var srv *grpc.Server = nil
+	if os.Getenv("USE_TLS") == "true" {
+		creds, _ := credentials.NewServerTLSFromFile("service.pem", "service.key")
+		srv = grpc.NewServer(grpc.Creds(creds))
+		log.Println("GRPC with TLS")
+	} else {
+		log.Println("GRPC without TLS")
+		srv = grpc.NewServer()
+	}
 
-	s.Serve(lis)
+	pb.RegisterSomeServiceServer(srv, &server{})
+
+	srv.Serve(lis)
 }
