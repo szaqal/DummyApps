@@ -5,21 +5,26 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
 
-	serverAddress := os.Getenv("SERVER_ADDRESS")
-	if serverAddress == "" {
-		log.Fatalf("Missing SERVER_ADDRESS")
-	}
-	log.Println("Calling => ", serverAddress)
-	resp, err := http.Get(serverAddress)
+	for {
+		serverAddress := os.Getenv("SERVER_ADDRESS")
+		if serverAddress == "" {
+			log.Fatalf("Missing SERVER_ADDRESS")
+		}
+		log.Println("Calling => ", serverAddress)
+		resp, err := http.Get(serverAddress)
 
-	if err != nil {
-		log.Fatalf(err.Error())
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+		body, err := ioutil.ReadAll(resp.Body)
+		defer resp.Body.Close()
+		log.Printf(" HTTP: %d | %s", resp.StatusCode, body)
+		<-time.After(1 * time.Second)
 	}
-	body, err := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
-	log.Printf(" HTTP: %d | %s", resp.StatusCode, body)
+
 }
