@@ -32,7 +32,7 @@ spec:
   selector:
     app: dummy-grpc-clock-server
   ports:
-  - name: tcp
+  - name: grpc
     port: 50051
     targetPort: 50051
 ---
@@ -56,9 +56,9 @@ spec:
         imagePullPolicy: Always
         env:
         - name: USE_TLS
-          value: "false"          
+          value: "false"
         - name: SERVER_ADDRESS
-          value: "istio-ingressgateway.istio-system.svc.cluster.local:31400"
+          value: "istio-ingressgateway.istio-system.svc.cluster.local:31399"
 
 ---
 apiVersion: networking.istio.io/v1alpha3
@@ -70,9 +70,9 @@ spec:
     istio: ingressgateway
   servers:
   - port:
-      number: 31400
-      name: tcp
-      protocol: TCP
+      number: 31399
+      name: grpc
+      protocol: GRPC
     hosts:
     - "*"
 ---
@@ -85,11 +85,12 @@ spec:
   - "*"
   gateways:
   - dummy-grpc-clock-gateway
-  tcp:
+  http:
   - match:
-    - port: 31400
+    - port: 31399
     route:
     - destination:
         host: dummy-grpc-clock-server.default.svc.cluster.local
         port:
           number: 50051
+          port: GRPC
