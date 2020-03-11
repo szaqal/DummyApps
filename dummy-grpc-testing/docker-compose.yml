@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  server:
+    image: szaqal/dummy-grpc-testing-server:latest
+    container_name: server
+  client:
+    image: szaqal/dummy-grpc-testing-client:latest
+    container_name: client
+    environment: 
+      - SERVER_ADDRESS=server:50051
+    depends_on:
+      - server

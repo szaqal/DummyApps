@@ -5,6 +5,6 @@ dummy-grpc-clock/server/server
 dummy-grpc-clock/client/dummy-grpc-clock-client
 dummy-grpc-clock/server/dummy-grpc-clock-server
 dummy-http-client/dummy-http-client
-dummy-grpc-testing/server/dummy-grpc-clock-server
+dummy-grpc-testing/server/dummy-grpc-testing-server
 dummy-grpc-testing/client_go/client_go
-dummy-grpc-testing/client_go/dummy-grpc-clock-client
+dummy-grpc-testing/client_go/dummy-grpc-testing-client
