@@ -25,11 +25,13 @@ public class DumpThreadsTask extends TimerTask {
     Set<Entry<State, List<ThreadInfo>>> entries = Arrays.stream(threadInfos).collect(Collectors.groupingBy(x -> x.getThreadState()))
         .entrySet();
 
-    StringBuilder builder = new StringBuilder();
+    StringBuilder states = new StringBuilder();
     for(Entry<State, List<ThreadInfo>> s: entries) {
-      builder.append(String.format(" %s : %s ", s.getKey(), s.getValue().size()));
+
+      states.append(String.format("\n\t %s : %s, %s, ", s.getKey(), s.getValue().size(),
+          s.getValue().stream().map(x -> x.getThreadName()).collect(Collectors.joining(","))));
     }
-    log.info("{}", builder.toString());
+    log.info("{}", states.toString());
 
   }
 }

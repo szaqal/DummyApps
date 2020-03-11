@@ -18,7 +18,7 @@ public class Caller implements Runnable {
 
   @Override
   public void run() {
-    for (int i = 0; i < 1_000; i++) {
+    for (int i = 0; i < 500; i++) {
       delayServiceBlockingStub.perform(Empty.newBuilder().build());
     }
     log.info(this + " DONE");

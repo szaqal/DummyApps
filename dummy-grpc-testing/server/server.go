@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"time"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
@@ -22,6 +23,7 @@ func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.ServiceR
 
 	resp := &pb.ServiceResponse{Message: "Hi"}
 	log.Println("Request Served")
+	<-time.After(300 * time.Millisecond)
 	return resp, nil
 }
 
