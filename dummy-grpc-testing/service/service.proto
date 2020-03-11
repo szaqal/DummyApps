@@ -4,6 +4,8 @@ import "google/protobuf/empty.proto";
 
 package service;
 
+option java_package = "com.dummy.grpc";
+
 message ServiceResponse {
     string message = 1;
 }

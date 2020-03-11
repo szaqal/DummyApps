@@ -1,7 +1,9 @@
 #!/bin/bash
 
-echo "Protogen"
+echo "Proto (GO)"
 protoc -I service/ service/service.proto --go_out=plugins=grpc:service
+echo "Proto (JAVA)"
+protoc -I service/ --java_out=client_java/grpc-client/src/main/java service/service.proto
 
 
 client=$(pwd)/client_go

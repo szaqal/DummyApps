@@ -3,9 +3,9 @@ services:
   server:
     image: szaqal/dummy-grpc-testing-server:latest
     container_name: server
-  client:
+  client_go:
     image: szaqal/dummy-grpc-testing-client:latest
-    container_name: client
+    container_name: client_go
     environment: 
       - SERVER_ADDRESS=server:50051
     depends_on:
