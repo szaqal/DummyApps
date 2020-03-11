@@ -1,12 +1,9 @@
 dummy-http/dummy-http
 .DS_Store
-dummy-grpc-clock/client/client
-dummy-grpc-clock/server/server
-dummy-grpc-clock/client/dummy-grpc-clock-client
-dummy-grpc-clock/server/dummy-grpc-clock-server
 dummy-http-client/dummy-http-client
 dummy-grpc-testing/server/dummy-grpc-testing-server
 dummy-grpc-testing/client_go/client_go
 dummy-grpc-testing/client_go/dummy-grpc-testing-client
 dummy-grpc-testing/client_java/grpc-client/target/
 dummy-grpc-testing/client_java/grpc-client/.idea/
+dummy-grpc-testing/server/server

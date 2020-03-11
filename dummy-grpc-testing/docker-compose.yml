@@ -3,6 +3,8 @@ services:
   server:
     image: szaqal/dummy-grpc-testing-server:latest
     container_name: server
+    ports:
+      - 50051:50051
   client_go:
     image: szaqal/dummy-grpc-testing-client:latest
     container_name: client_go
