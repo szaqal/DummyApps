@@ -25,7 +25,7 @@ public class App {
     DelayServiceBlockingStub delayServiceBlockingStub = DelayServiceGrpc.newBlockingStub(channel);
 
     ExecutorService executorService = Executors.newFixedThreadPool(5);
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 20; i++) {
       executorService.submit(new Caller(delayServiceBlockingStub));
     }
 
