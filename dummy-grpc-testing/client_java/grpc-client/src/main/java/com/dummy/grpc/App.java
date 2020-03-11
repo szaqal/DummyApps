@@ -24,13 +24,13 @@ public class App {
         .build();
     DelayServiceBlockingStub delayServiceBlockingStub = DelayServiceGrpc.newBlockingStub(channel);
 
-    ExecutorService executorService = Executors.newFixedThreadPool(10);
-    for (int i = 0; i < 100; i++) {
+    ExecutorService executorService = Executors.newFixedThreadPool(2);
+    for (int i = 0; i < 1_000; i++) {
       executorService.submit(new Caller(delayServiceBlockingStub));
     }
 
     Timer timer = new Timer();
-    timer.schedule(new DumpThreadsTask(), 0, 5000);
+    timer.schedule(new DumpThreadsTask(), 0, 2000);
 
   }
 }

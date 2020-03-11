@@ -21,7 +21,7 @@ public class DumpThreadsTask extends TimerTask {
   @Override
   public void run() {
     ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
-    ThreadInfo[] threadInfos = threadMxBean.dumpAllThreads(true, true);
+    ThreadInfo[] threadInfos = threadMxBean.dumpAllThreads(false, false);
     Set<Entry<State, List<ThreadInfo>>> entries = Arrays.stream(threadInfos).collect(Collectors.groupingBy(x -> x.getThreadState()))
         .entrySet();
 
