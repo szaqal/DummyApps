@@ -2,24 +2,21 @@ package com.dummy.grpc;
 
 
 import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.ListeningExecutorService;
 
 public class App {
 
-
   public static void main(String[] args) {
+    Timer timer = new Timer();
+    timer.schedule(new DumpThreadsTask(), 0, 10_000);
+
     BlockingSub blockingSub = new BlockingSub();
 
-    ExecutorService executorService = Executors.newFixedThreadPool(Defaults.threadPoolSize());
+    ListeningExecutorService workerExecutor = Threads.buildWorkerExecutor();
     for (int i = 0; i < Defaults.threadCount(); i++) {
-      executorService.submit(blockingSub.getCaller());
+      workerExecutor.submit(blockingSub.getCaller());
     }
-
-    Timer timer = new Timer();
-    timer.schedule(new DumpThreadsTask(), 0, 15000);
 
   }
 }

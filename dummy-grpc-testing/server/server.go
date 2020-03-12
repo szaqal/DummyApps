@@ -23,7 +23,7 @@ func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.ServiceR
 
 	resp := &pb.ServiceResponse{Message: "Hi"}
 	log.Println("Request Served")
-	<-time.After(500 * time.Millisecond)
+	<-time.After(100 * time.Millisecond)
 	return resp, nil
 }
 
