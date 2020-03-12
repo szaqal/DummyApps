@@ -15,8 +15,10 @@ public class BlockingSub {
 
   private DelayServiceBlockingStub delayServiceBlockingStub;
 
-  public BlockingSub(String serverAddress) {
-    ManagedChannel channel = ManagedChannelBuilder.forTarget(Optional.ofNullable(serverAddress).orElse("localhost:50051")).usePlaintext()
+  public BlockingSub() {
+    ManagedChannel channel = ManagedChannelBuilder
+        .forTarget(Defaults.getServerAddress())
+        .usePlaintext()
         .build();
     delayServiceBlockingStub = DelayServiceGrpc.newBlockingStub(channel);
   }
@@ -37,10 +39,14 @@ public class BlockingSub {
 
     @Override
     public void run() {
-      for (int i = 0; i < 200; i++) {
+      int iterationsCount = Defaults.iterationsCount();
+      for (int i = 0; i < iterationsCount; i++) {
+        if (iterationsCount / 2 == i) {
+          log.info("50% done");
+        }
         delayServiceBlockingStub.perform(Empty.newBuilder().build());
       }
-      log.info(this + " DONE");
+      log.info("100% done");
     }
   }
 }
