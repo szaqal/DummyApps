@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dummy.grpc.DelayServiceGrpc.DelayServiceBlockingStub;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 
 public class Caller implements Runnable {
@@ -23,7 +24,8 @@ public class Caller implements Runnable {
       if (iterationsCount / 2 == i) {
         log.info("50% done");
       }
-      delayServiceBlockingStub.perform(Empty.newBuilder().build());
+      ByteString message = delayServiceBlockingStub.perform(Empty.newBuilder().build()).getMessage();
+      message.size();
     }
     log.info("100% done");
   }

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"math/rand"
 	"net"
 	"time"
 
@@ -21,10 +22,16 @@ type server struct {
 
 func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.ServiceResponse, error) {
 
-	resp := &pb.ServiceResponse{Message: "Hi"}
-	log.Println("Request Served")
-	<-time.After(100 * time.Millisecond)
+	timeStamp := time.Now()
+	resp := &pb.ServiceResponse{Message: generateMessage()}
+	log.Println("Request Served in:", time.Since(timeStamp))
 	return resp, nil
+}
+
+func generateMessage() []byte {
+	token := make([]byte, 2097152) //2MB
+	rand.Read(token)
+	return token
 }
 
 func main() {
