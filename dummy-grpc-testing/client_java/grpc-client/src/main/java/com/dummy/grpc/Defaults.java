@@ -18,7 +18,7 @@ public class Defaults {
 
 
   public static final int iterationsCount() {
-    return Integer.parseInt(Optional.ofNullable(System.getenv("ITERATIONS_COUNT")).orElse("20"));
+    return Integer.parseInt(Optional.ofNullable(System.getenv("ITERATIONS_COUNT")).orElse("15"));
   }
 
 }

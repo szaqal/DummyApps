@@ -18,7 +18,7 @@ public class Threads {
 
     public static final ThreadFactory WORKER_FACTORY = new ThreadFactoryBuilder().setNameFormat("worker-%d").build();
 
-    public static final ListeningExecutorService buildWorkerExecutor() {
+    public static final ExecutorService buildWorkerExecutor() {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
                 Defaults.threadPoolSize(),
                 Defaults.threadPoolSize(),
@@ -32,7 +32,7 @@ public class Threads {
 
             }
         });
-        return MoreExecutors.listeningDecorator(executor);
+        return executor;
     }
 
 
