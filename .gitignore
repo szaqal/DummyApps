@@ -8,3 +8,7 @@ dummy-grpc-testing/client_java/grpc-client/.idea/
 dummy-grpc-testing/server/server
 dummy-grpc-testing/client_go/client_go
 dummy-grpc-testing/client_go/client_go
+dummy-grpc-testing/client_java/grpc-client/.classpath
+dummy-grpc-testing/client_java/grpc-client/.project
+dummy-grpc-testing/client_java/grpc-client/.settings/
+
