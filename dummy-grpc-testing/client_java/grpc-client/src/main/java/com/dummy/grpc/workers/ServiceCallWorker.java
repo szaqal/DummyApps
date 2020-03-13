@@ -24,6 +24,7 @@ public class ServiceCallWorker implements Runnable {
   private long end;
 
   private static final long  MEGABYTE = 1024L * 1024L;
+
   public ServiceCallWorker(int jobId, DelayServiceBlockingStub delayServiceBlockingStub) {
     this.delayServiceBlockingStub = delayServiceBlockingStub;
     this.jobId = jobId;

@@ -1,13 +1,12 @@
 package com.dummy.grpc;
 
 
+import com.dummy.grpc.stub.BlockingStub;
 import com.dummy.grpc.threads.Threads;
-import com.google.common.util.concurrent.ListeningExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class App {
   private static final Logger LOG = LoggerFactory.getLogger("MAIN");
