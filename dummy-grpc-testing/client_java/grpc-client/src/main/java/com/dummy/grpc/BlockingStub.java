@@ -29,8 +29,8 @@ public class BlockingStub {
     delayServiceBlockingStub = DelayServiceGrpc.newBlockingStub(channel);
   }
 
-  public Runnable getCaller() {
-    return new ServiceCallWorker(delayServiceBlockingStub);
+  public Runnable getCaller(int jobId) {
+    return new ServiceCallWorker(jobId, delayServiceBlockingStub);
   }
 
 

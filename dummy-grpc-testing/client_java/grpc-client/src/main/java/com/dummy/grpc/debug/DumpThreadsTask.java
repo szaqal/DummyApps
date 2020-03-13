@@ -1,4 +1,4 @@
-package com.dummy.grpc;
+package com.dummy.grpc.debug;
 
 import java.lang.Thread.State;
 import java.lang.management.ManagementFactory;
