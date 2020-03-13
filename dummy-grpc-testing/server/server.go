@@ -24,6 +24,7 @@ func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.ServiceR
 
 	timeStamp := time.Now()
 	resp := &pb.ServiceResponse{Message: generateMessage()}
+	<-time.After(1 * time.Second)
 	log.Println("Request Served in:", time.Since(timeStamp))
 	return resp, nil
 }

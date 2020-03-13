@@ -1,5 +1,6 @@
-package com.dummy.grpc;
+package com.dummy.grpc.workers;
 
+import com.dummy.grpc.Defaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,13 +8,13 @@ import com.dummy.grpc.DelayServiceGrpc.DelayServiceBlockingStub;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
 
-public class Caller implements Runnable {
+public class ServiceCallWorker implements Runnable {
 
   private static final Logger log = LoggerFactory.getLogger("GRPC");
 
   private DelayServiceBlockingStub delayServiceBlockingStub;
 
-  public Caller(DelayServiceBlockingStub delayServiceBlockingStub) {
+  public ServiceCallWorker(DelayServiceBlockingStub delayServiceBlockingStub) {
     this.delayServiceBlockingStub = delayServiceBlockingStub;
   }
 

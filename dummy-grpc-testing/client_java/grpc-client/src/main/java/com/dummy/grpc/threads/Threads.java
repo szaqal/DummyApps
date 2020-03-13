@@ -1,8 +1,9 @@
-package com.dummy.grpc;
+package com.dummy.grpc.threads;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import com.dummy.grpc.Defaults;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
