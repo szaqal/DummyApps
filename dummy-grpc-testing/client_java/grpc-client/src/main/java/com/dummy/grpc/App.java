@@ -26,9 +26,9 @@ public class App {
 
     ExecutorService workerExecutor = Threads.buildWorkerExecutor();
     for (int i = 1; i < Defaults.threadCount() +1; i++) {
-      //Runnable caller = getBlockingServiceWorker(channel, i);
+      Runnable caller = getBlockingServiceWorker(channel, i);
       //Runnable caller = getFutureServiceWorker(channel, i);
-      Runnable caller = getOtherWorker(channel, i);
+      //Runnable caller = getOtherWorker(channel, i);
       LOG.info("Submit Job [{}]", caller);
       workerExecutor.submit(caller);
       Thread.sleep(5000/i);
@@ -74,5 +74,6 @@ public class App {
               LOG.info("Completed");
           }
       });
+      return null;
   }
 }
