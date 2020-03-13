@@ -51,7 +51,7 @@ public class ServiceCallWorker implements Runnable {
   private long encryptData(byte[] data) {
     long start = System.currentTimeMillis();
       binaryEncryptor.setPassword("pass");
-    for (int i=0;i<10;i++) {
+    for (int i=0;i<5;i++) {
         binaryEncryptor.encrypt(data);
     }
     return System.currentTimeMillis() - start;
