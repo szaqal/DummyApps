@@ -16,15 +16,15 @@ public class Threads {
 
     private static AtomicInteger DISCARDED = new AtomicInteger();
 
-    public static final ThreadFactory WORKER_FACTORY = new ThreadFactoryBuilder().setNameFormat("worker-%d").build();
 
     public static final ExecutorService buildWorkerExecutor() {
+        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("worker-%d").build();
         ThreadPoolExecutor executor = new ThreadPoolExecutor(
                 Defaults.threadPoolSize(),
                 Defaults.threadPoolSize(),
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>(10),
-                WORKER_FACTORY);
+                factory);
         executor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
@@ -34,6 +34,8 @@ public class Threads {
         });
         return executor;
     }
+
+
 
 
 }
