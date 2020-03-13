@@ -4,6 +4,7 @@ import com.dummy.grpc.Defaults;
 import com.dummy.grpc.DelayServiceGrpc;
 import com.dummy.grpc.DelayServiceGrpc.DelayServiceBlockingStub;
 import com.dummy.grpc.workers.ServiceCallWorker;
+import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
@@ -22,7 +23,7 @@ public class BlockingStub {
   }
 
   public Runnable getCaller(int jobId) {
-    return new ServiceCallWorker(jobId, delayServiceBlockingStub);
+    return new ServiceCallWorker(jobId, () -> delayServiceBlockingStub.perform(Empty.newBuilder().build()).getMessage());
   }
 
 

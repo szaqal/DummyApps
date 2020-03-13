@@ -9,11 +9,13 @@ import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Supplier;
+
 public class ServiceCallWorker implements Runnable {
 
   private static final Logger log = LoggerFactory.getLogger("GRPC");
 
-  private DelayServiceBlockingStub delayServiceBlockingStub;
+  private Supplier<ByteString> dataSupplier;
 
   private BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
 
@@ -25,8 +27,8 @@ public class ServiceCallWorker implements Runnable {
 
   private static final long  MEGABYTE = 1024L * 1024L;
 
-  public ServiceCallWorker(int jobId, DelayServiceBlockingStub delayServiceBlockingStub) {
-    this.delayServiceBlockingStub = delayServiceBlockingStub;
+  public ServiceCallWorker(int jobId, Supplier<ByteString> dataSupplier) {
+    this.dataSupplier = dataSupplier;
     this.jobId = jobId;
     this.start = System.currentTimeMillis();
   }
@@ -37,8 +39,7 @@ public class ServiceCallWorker implements Runnable {
     byte[] data = new byte[]{};
 
     for (int i = 0; i < iterationsCount; i++) {
-      ByteString message = delayServiceBlockingStub.perform(Empty.newBuilder().build()).getMessage();
-      data = Bytes.concat(data, message.toByteArray());
+      data = Bytes.concat(data, dataSupplier.get().toByteArray());
     }
 
     long encryptionElapsed = encryptData(data);
