@@ -13,7 +13,7 @@ public class Defaults {
   }
 
   public static final int threadCount() {
-    return Integer.parseInt(Optional.ofNullable(System.getenv("WORKER_POOL_SIZE")).orElse("20"));
+    return Integer.parseInt(Optional.ofNullable(System.getenv("WORKER_POOL_SIZE")).orElse("25"));
   }
 
 

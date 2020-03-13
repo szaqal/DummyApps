@@ -6,6 +6,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 public class BlockingStub {
@@ -19,6 +20,7 @@ public class BlockingStub {
 
     ManagedChannel channel = ManagedChannelBuilder
         .forTarget(Defaults.getServerAddress())
+            .executor(Executors.newSingleThreadExecutor())
         .usePlaintext()
         .build();
     delayServiceBlockingStub = DelayServiceGrpc.newBlockingStub(channel);

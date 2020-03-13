@@ -1,14 +1,13 @@
 package com.dummy.grpc.workers;
 
 import com.dummy.grpc.Defaults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.dummy.grpc.DelayServiceGrpc.DelayServiceBlockingStub;
+import com.google.common.primitives.Bytes;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Empty;
-
-import java.util.concurrent.TimeUnit;
+import org.jasypt.util.binary.BasicBinaryEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServiceCallWorker implements Runnable {
 
@@ -16,13 +15,15 @@ public class ServiceCallWorker implements Runnable {
 
   private DelayServiceBlockingStub delayServiceBlockingStub;
 
+  private BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
+
   private int jobId;
 
   private long start;
 
   private long end;
 
-
+  private static final long  MEGABYTE = 1024L * 1024L;
   public ServiceCallWorker(int jobId, DelayServiceBlockingStub delayServiceBlockingStub) {
     this.delayServiceBlockingStub = delayServiceBlockingStub;
     this.jobId = jobId;
@@ -32,15 +33,26 @@ public class ServiceCallWorker implements Runnable {
   @Override
   public void run() {
     int iterationsCount = Defaults.iterationsCount();
+    byte[] data = new byte[]{};
+
     for (int i = 0; i < iterationsCount; i++) {
-      if (iterationsCount / 2 == i) {
-        log.debug("{} 50% done", toString());
-      }
       ByteString message = delayServiceBlockingStub.perform(Empty.newBuilder().build()).getMessage();
-      message.size();
+      data = Bytes.concat(data, message.toByteArray());
     }
+
+    long encryptionElapsed = encryptData(data);
     end = System.currentTimeMillis();
-    log.info("{} 100% done in {} ms", toString(),end-start);
+
+    log.info("{} 100% / time {} ms / encryption {} ms / received {} MB", toString(), end - start, encryptionElapsed, data.length / MEGABYTE);
+  }
+
+  private long encryptData(byte[] data) {
+    long start = System.currentTimeMillis();
+      binaryEncryptor.setPassword("pass");
+    for (int i=0;i<10;i++) {
+        binaryEncryptor.encrypt(data);
+    }
+    return System.currentTimeMillis() - start;
   }
 
   @Override
