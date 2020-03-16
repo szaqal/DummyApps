@@ -12,7 +12,6 @@ import java.util.concurrent.ExecutorService;
 
 public class App {
 
-
   private static final Logger LOG = LoggerFactory.getLogger("MAIN");
 
   public static void main(String[] args) throws InterruptedException {
@@ -25,8 +24,8 @@ public class App {
 
     ExecutorService workerExecutor = Threads.buildWorkerExecutor();
     for (int i = 1; i < Defaults.threadCount() +1; i++) {
-      Runnable caller = getBlockingServiceWorker(channel, i);
-      //Runnable caller = getFutureServiceWorker(channel, i);
+      //Runnable caller = getBlockingServiceWorker(channel, i);
+      Runnable caller = getFutureServiceWorker(channel, i);
       LOG.info("Submit Job [{}]", caller);
       workerExecutor.submit(caller);
       Thread.sleep(5000/i);
@@ -37,19 +36,8 @@ public class App {
     return new ServiceCallBlockingWorker(jobId, managedChannel);
   }
 
-  /*
   private static Runnable getFutureServiceWorker(ManagedChannel managedChannel, int jobId) {
-      return new ServiceCallBlockingWorker(jobId,()-> {
-          try {
-              return DelayServiceGrpc.
-                      newFutureStub(managedChannel)
-                      .perform(Empty.newBuilder().build())
-                      .get().getMessage();
-          } catch (InterruptedException | ExecutionException e) {
-              e.printStackTrace();
-          }
-          return null;
-      });
+    return new ServiceCallBlockingWorker(jobId, managedChannel);
+  }
 
-  }*/
 }

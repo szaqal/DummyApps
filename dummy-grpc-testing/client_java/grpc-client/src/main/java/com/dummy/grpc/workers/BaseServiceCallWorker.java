@@ -23,7 +23,6 @@ public abstract class BaseServiceCallWorker implements Runnable {
     public BaseServiceCallWorker(int jobId) {
         this.jobId = jobId;
         this.start = System.currentTimeMillis();
-
     }
 
 
