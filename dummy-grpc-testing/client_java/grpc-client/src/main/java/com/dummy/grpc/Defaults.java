@@ -27,7 +27,7 @@ public class Defaults {
   }
 
   public static final String callerType() {
-    return Optional.ofNullable(System.getenv("CALLER_TYPE")).orElse("blocking");
+    return Optional.ofNullable(System.getenv("CALLER_TYPE")).orElse("streamsingle");
   }
 
 }

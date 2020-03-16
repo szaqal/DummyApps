@@ -4,6 +4,7 @@ package com.dummy.grpc;
 import com.dummy.grpc.threads.Threads;
 import com.dummy.grpc.workers.block.ServiceCallBlockingWorker;
 import com.dummy.grpc.workers.stream.ServiceCallClientStreaming;
+import com.dummy.grpc.workers.stream.ServiceCallClientStreamingSingleRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class App {
       switch (Defaults.callerType()) {
         case "blocking": caller = getBlockingServiceWorker(channel, i); break;
         case "stream": caller =  getClientStreamWorker(channel, i); break;
+        case "streamsingle": caller = getServiceCallClientStreamingSingleRequest(channel, i); break;
         default: LOG.error("Unknown caller type {}" , Defaults.callerType()); break;
       }
       //Runnable caller = getFutureServiceWorker(channel, i);
@@ -59,4 +61,7 @@ public class App {
     return new ServiceCallClientStreaming(jobId, managedChannel);
   }
 
+  private static Runnable getServiceCallClientStreamingSingleRequest(ManagedChannel managedChannel, int jobId) {
+    return new ServiceCallClientStreamingSingleRequest(jobId, managedChannel);
+  }
 }
