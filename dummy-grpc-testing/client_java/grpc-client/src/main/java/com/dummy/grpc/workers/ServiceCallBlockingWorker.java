@@ -17,9 +17,7 @@ public class ServiceCallBlockingWorker extends BaseServiceCallWorker implements 
             delayServiceBlockingStub = DelayServiceGrpc
                     .newBlockingStub(managedChannel);
         }
-
     }
-
 
     @Override
     protected byte[] getBytes() {

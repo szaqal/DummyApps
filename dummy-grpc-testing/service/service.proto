@@ -12,4 +12,5 @@ message ServiceResponse {
 
 service DelayService {
     rpc perform(google.protobuf.Empty) returns (ServiceResponse) {}
+    rpc performClientStream(stream google.protobuf.Empty) returns (ServiceResponse) {}
 }

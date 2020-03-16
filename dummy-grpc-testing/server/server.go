@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"math/rand"
 	"net"
@@ -27,6 +28,20 @@ func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.ServiceR
 	<-time.After(1 * time.Second)
 	log.Println("Request Served in:", time.Since(timeStamp))
 	return resp, nil
+}
+
+func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamServer) error {
+	timeStamp := time.Now()
+	for {
+		_, err := stream.Recv()
+		if err == io.EOF {
+			log.Println("Request Served in:", time.Since(timeStamp))
+			return stream.SendAndClose(&pb.ServiceResponse{Message: generateMessage()})
+		}
+		if err != nil {
+			return err
+		}
+	}
 }
 
 func generateMessage() []byte {
