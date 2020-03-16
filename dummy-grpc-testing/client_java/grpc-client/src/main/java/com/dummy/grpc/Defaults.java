@@ -4,6 +4,8 @@ import java.util.Optional;
 
 public class Defaults {
 
+  public static final long  MEGABYTE = 1024L * 1024L;
+
   public static final String getServerAddress() {
     return Optional.ofNullable(System.getenv("SERVER_ADDRESS")).orElse("localhost:50051");
   }
@@ -17,7 +19,7 @@ public class Defaults {
   }
 
   public static final int iterationsCount() {
-    return Integer.parseInt(Optional.ofNullable(System.getenv("ITERATIONS_COUNT")).orElse("10"));
+    return Integer.parseInt(Optional.ofNullable(System.getenv("ITERATIONS_COUNT")).orElse("50"));
   }
 
 }

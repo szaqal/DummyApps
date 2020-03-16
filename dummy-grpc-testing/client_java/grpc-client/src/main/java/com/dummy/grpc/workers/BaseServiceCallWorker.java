@@ -6,13 +6,13 @@ import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.dummy.grpc.Defaults.MEGABYTE;
+
 public abstract class BaseServiceCallWorker implements Runnable {
 
     private BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
 
     protected static final Logger log = LoggerFactory.getLogger("GRPC");
-
-    private static final long  MEGABYTE = 1024L * 1024L;
 
     private int jobId;
 

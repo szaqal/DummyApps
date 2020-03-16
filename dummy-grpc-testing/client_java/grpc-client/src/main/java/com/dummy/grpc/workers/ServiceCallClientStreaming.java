@@ -1,18 +1,26 @@
 package com.dummy.grpc.workers;
 
+import com.dummy.grpc.Defaults;
 import com.dummy.grpc.DelayServiceGrpc;
 import com.dummy.grpc.Service;
+import com.google.common.primitives.Bytes;
 import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
+import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
+
+import static com.dummy.grpc.Defaults.MEGABYTE;
 
 public class ServiceCallClientStreaming implements Runnable {
 
-    private static final Logger LOG = LoggerFactory.getLogger("GRPC-ASYNC");
+    private BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
+
+    private static final Logger log = LoggerFactory.getLogger("GRPC-ASYNC");
 
     private int jobId;
 
@@ -28,19 +36,33 @@ public class ServiceCallClientStreaming implements Runnable {
 
         emptyStreamObserver = DelayServiceGrpc.newStub(managedChannel).performClientStream(new StreamObserver<Service.ServiceResponse>() {
 
+            byte[] data = new byte[]{};
+
             @Override
             public void onNext(Service.ServiceResponse value) {
-                LOG.info("Received {}", value.getMessage().toByteArray().length);
+                data = Bytes.concat(data, value.getMessage().toByteArray());
             }
 
             @Override
             public void onError(Throwable t) {
-                LOG.info("ERROR", t);
+                log.info("ERROR", t);
             }
 
             @Override
             public void onCompleted() {
-                LOG.info("COMPLETED");
+                long encryptionElapsed = encryptData(data);
+                end = System.currentTimeMillis();
+                log.info("{} 100% / time {} ms / encryption {} ms / received {} MB", toString(), end - start, encryptionElapsed, data.length / MEGABYTE);
+            }
+
+
+            private long encryptData(byte[] data) {
+                long start = System.currentTimeMillis();
+                binaryEncryptor.setPassword("pass");
+                for (int i = 0; i < 5; i++) {
+                    binaryEncryptor.encrypt(data);
+                }
+                return System.currentTimeMillis() - start;
             }
         });
     }
@@ -48,8 +70,14 @@ public class ServiceCallClientStreaming implements Runnable {
 
     @Override
     public void run() {
-        Stream.of(Empty.newBuilder().build(), Empty.newBuilder().build(), Empty.newBuilder().build(), Empty.newBuilder().build())
-                .forEach(emptyStreamObserver::onNext);
+        Empty[] empties = new Empty[Defaults.iterationsCount()];
+        Arrays.fill(empties, Empty.newBuilder().build());
+        Stream.of(empties).forEach(emptyStreamObserver::onNext);
         emptyStreamObserver.onCompleted();
+    }
+
+    @Override
+    public String toString() {
+        return "job-" + jobId;
     }
 }

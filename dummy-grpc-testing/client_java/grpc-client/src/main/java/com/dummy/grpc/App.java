@@ -19,15 +19,16 @@ public class App {
 
     ManagedChannel channel = ManagedChannelBuilder
             .forTarget(Defaults.getServerAddress())
+            .maxInboundMessageSize(Integer.MAX_VALUE)
             .usePlaintext()
             .build();
 
 
     ExecutorService workerExecutor = Threads.buildWorkerExecutor();
     for (int i = 1; i < Defaults.threadCount() +1; i++) {
-      //Runnable caller = getBlockingServiceWorker(channel, i);
+      Runnable caller = getBlockingServiceWorker(channel, i);
       //Runnable caller = getFutureServiceWorker(channel, i);
-      Runnable caller = getClientStream(channel, i);
+      //Runnable caller = getClientStream(channel, i);
       LOG.info("Submit Job [{}]", caller);
       workerExecutor.submit(caller);
       Thread.sleep(5000/i);

@@ -24,19 +24,20 @@ type server struct {
 func (s *server) Perform(ctx context.Context, params *empty.Empty) (*pb.ServiceResponse, error) {
 
 	timeStamp := time.Now()
-	resp := &pb.ServiceResponse{Message: generateMessage()}
-	<-time.After(1 * time.Second)
+	resp := &pb.ServiceResponse{Message: generateMessage(1)}
 	log.Println("Request Served in:", time.Since(timeStamp))
 	return resp, nil
 }
 
 func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamServer) error {
 	timeStamp := time.Now()
+	i := 0
 	for {
+		i++
 		_, err := stream.Recv()
 		if err == io.EOF {
-			log.Println("Request Served in:", time.Since(timeStamp))
-			return stream.SendAndClose(&pb.ServiceResponse{Message: generateMessage()})
+			log.Printf("Request Served in: %s | %d client requests", time.Since(timeStamp), i)
+			return stream.SendAndClose(&pb.ServiceResponse{Message: generateMessage(i)})
 		}
 		if err != nil {
 			return err
@@ -44,8 +45,8 @@ func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamS
 	}
 }
 
-func generateMessage() []byte {
-	token := make([]byte, 2097152) //2MB
+func generateMessage(multiplier int) []byte {
+	token := make([]byte, multiplier*1000000) //1MB*x
 	rand.Read(token)
 	return token
 }
