@@ -57,7 +57,7 @@ public class ServiceCallClientStreaming implements Runnable {
 
             @Override
             public void onCompleted() {
-                encryptionElapsed = encryptData(data);
+                encryptionElapsed = 0;//encryptData(data);
                 end = System.currentTimeMillis();
                 summary =  String.format("Finished / time %s ms / encryption %s ms / received %s MB",  end - start, encryptionElapsed, data.length / MEGABYTE);
                 finishLatch.countDown();
@@ -65,6 +65,7 @@ public class ServiceCallClientStreaming implements Runnable {
 
 
             private long encryptData(byte[] data) {
+
                 long start = System.currentTimeMillis();
                 binaryEncryptor.setPassword("pass");
                 binaryEncryptor.encrypt(data);

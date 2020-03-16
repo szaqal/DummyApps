@@ -33,12 +33,12 @@ func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamS
 	timeStamp := time.Now()
 	i := 0
 	for {
-		i++
 		_, err := stream.Recv()
 		if err == io.EOF {
 			log.Printf("Request Served in: %s | %d client requests", time.Since(timeStamp), i)
 			return stream.SendAndClose(&pb.ServiceResponse{Message: generateMessage(i)})
 		}
+		i++
 		if err != nil {
 			return err
 		}

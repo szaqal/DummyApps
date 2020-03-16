@@ -28,15 +28,10 @@ public class ServiceCallClientStreamingSingleRequest implements Runnable {
 
     private long end;
 
-    private long encryptionElapsed;
-
     private String summary;
 
-    byte[] data = new byte[]{};
 
-    private CountDownLatch finishLatch = new CountDownLatch(Defaults.iterationsCount()-1);
-
-    StreamObserver<Empty> emptyStreamObserver ;
+    StreamObserver<Empty> emptyStreamObserver;
 
     DelayServiceGrpc.DelayServiceStub delayServiceStub;
 
@@ -46,47 +41,53 @@ public class ServiceCallClientStreamingSingleRequest implements Runnable {
         delayServiceStub = DelayServiceGrpc.newStub(managedChannel);
     }
 
+    private class CustomStreamObserver implements StreamObserver<Service.ServiceResponse> {
 
+        CountDownLatch finishLatch = new CountDownLatch(Defaults.iterationsCount() - 1);
+
+        byte[] data = new byte[]{};
+
+        @Override
+        public void onNext(Service.ServiceResponse value) {
+            synchronized (this) {
+                byte[] bytes = value.getMessage().toByteArray();
+                data = Bytes.concat(data, bytes);
+            }
+
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            log.info("ERROR", t);
+        }
+
+        @Override
+        public void onCompleted() {
+            finishLatch.countDown();
+        }
+    }
 
 
     @Override
     public void run() {
 
-        Empty[] empties = new Empty[]{Empty.newBuilder().build()};
-        for (int i = 0; i <  Defaults.iterationsCount(); i++) {
+        CustomStreamObserver responseObserver = new CustomStreamObserver();
+        for (int i = 0; i < Defaults.iterationsCount(); i++) {
 
-            emptyStreamObserver = delayServiceStub.performClientStream(new StreamObserver<Service.ServiceResponse>() {
-
-                @Override
-                public void onNext(Service.ServiceResponse value) {
-                    data = Bytes.concat(data, value.getMessage().toByteArray());
-                }
-
-                @Override
-                public void onError(Throwable t) {
-                    log.info("ERROR", t);
-                }
-
-                @Override
-                public void onCompleted() {
-                    finishLatch.countDown();
-                }
-
-            });
-
-            Stream.of(empties).forEach(emptyStreamObserver::onNext);
+            emptyStreamObserver = delayServiceStub.performClientStream(responseObserver);
+            emptyStreamObserver.onNext(Empty.newBuilder().build());
             emptyStreamObserver.onCompleted();
         }
 
         try {
-            finishLatch.await();
+            responseObserver.finishLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        long encryptionElapsed = encryptData(data);
+        long encryptionElapsed = 0;// encryptData(responseObserver.data);
         end = System.currentTimeMillis();
-        summary =  String.format("Finished / time %s ms / encryption %s ms / received %s MB",  end - start, encryptionElapsed, data.length / MEGABYTE);
+        summary = String.format("Finished / time %s ms / encryption %s ms / received %s MB", end - start, encryptionElapsed, responseObserver.data.length / MEGABYTE);
 
         log.info("[{}] {}", toString(), summary);
     }

@@ -42,7 +42,7 @@ public abstract class BaseServiceCallWorker implements Runnable {
             data = Bytes.concat(data, getBytes());
         }
 
-        long encryptionElapsed = encryptData(data);
+        long encryptionElapsed = 0;encryptData(data);
         end = System.currentTimeMillis();
 
         log.info("[{}] Finished / time {} ms / encryption {} ms / received {} MB", toString(), end - start, encryptionElapsed, data.length / MEGABYTE);

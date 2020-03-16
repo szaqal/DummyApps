@@ -37,7 +37,7 @@ public class App {
       }
       //Runnable caller = getFutureServiceWorker(channel, i);
       workerExecutor.submit(caller);
-      Thread.sleep(10000/i);
+      Thread.sleep(5000/i);
     }
 
     try {
