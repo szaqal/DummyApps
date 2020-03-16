@@ -2,17 +2,17 @@ package com.dummy.grpc;
 
 
 import com.dummy.grpc.threads.Threads;
-import com.dummy.grpc.workers.ServiceCallWorker;
-import com.google.protobuf.Empty;
+import com.dummy.grpc.workers.ServiceCallBlockingWorker;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 public class App {
+
+
   private static final Logger LOG = LoggerFactory.getLogger("MAIN");
 
   public static void main(String[] args) throws InterruptedException {
@@ -34,13 +34,12 @@ public class App {
   }
 
   private static Runnable getBlockingServiceWorker(ManagedChannel managedChannel, int jobId) {
-    return new ServiceCallWorker(jobId, () -> DelayServiceGrpc
-            .newBlockingStub(managedChannel)
-            .perform(Empty.newBuilder().build()).getMessage());
+    return new ServiceCallBlockingWorker(jobId, managedChannel);
   }
 
+  /*
   private static Runnable getFutureServiceWorker(ManagedChannel managedChannel, int jobId) {
-      return new ServiceCallWorker(jobId,()-> {
+      return new ServiceCallBlockingWorker(jobId,()-> {
           try {
               return DelayServiceGrpc.
                       newFutureStub(managedChannel)
@@ -52,5 +51,5 @@ public class App {
           return null;
       });
 
-  }
+  }*/
 }
