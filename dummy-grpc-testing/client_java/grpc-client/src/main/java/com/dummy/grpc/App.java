@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class App {
 
@@ -28,12 +29,20 @@ public class App {
     for (int i = 1; i < Defaults.threadCount() +1; i++) {
       //Runnable caller = getBlockingServiceWorker(channel, i);
       //Runnable caller = getFutureServiceWorker(channel, i);
-      Runnable caller = getClientStream(channel, i);
-      LOG.info("Submit Job [{}]", caller);
+      Runnable caller = getClientStreamWorker(channel, i);
+      //LOG.info("Submit Job [{}]", caller);
       workerExecutor.submit(caller);
-      Thread.sleep(5000/i);
+      Thread.sleep(2000/i);
     }
-  }
+
+    try {
+      workerExecutor.shutdown();
+      if (!workerExecutor.awaitTermination(1, TimeUnit.HOURS)) {
+        workerExecutor.shutdownNow();
+      }
+    } catch (InterruptedException e) {
+      workerExecutor.shutdownNow();
+    }  }
 
   private static Runnable getBlockingServiceWorker(ManagedChannel managedChannel, int jobId) {
     return new ServiceCallBlockingWorker(jobId, managedChannel);
@@ -43,7 +52,7 @@ public class App {
     return new ServiceCallBlockingWorker(jobId, managedChannel);
   }
 
-  private static Runnable getClientStream(ManagedChannel managedChannel, int jobId) {
+  private static Runnable getClientStreamWorker(ManagedChannel managedChannel, int jobId) {
     return new ServiceCallClientStreaming(jobId, managedChannel);
   }
 

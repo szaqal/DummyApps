@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Stream;
 
 import static com.dummy.grpc.Defaults.MEGABYTE;
@@ -27,6 +28,12 @@ public class ServiceCallClientStreaming implements Runnable {
     private long start;
 
     private long end;
+
+    private long encryptionElapsed;
+
+    private String summary;
+
+    final CountDownLatch finishLatch = new CountDownLatch(1);
 
     StreamObserver<Empty> emptyStreamObserver ;
 
@@ -50,9 +57,10 @@ public class ServiceCallClientStreaming implements Runnable {
 
             @Override
             public void onCompleted() {
-                long encryptionElapsed = encryptData(data);
+                encryptionElapsed = encryptData(data);
                 end = System.currentTimeMillis();
-                log.info("{} 100% / time {} ms / encryption {} ms / received {} MB", toString(), end - start, encryptionElapsed, data.length / MEGABYTE);
+                summary =  String.format("Finished / time %s ms / encryption %s ms / received %s MB",  end - start, encryptionElapsed, data.length / MEGABYTE);
+                finishLatch.countDown();
             }
 
 
@@ -68,11 +76,19 @@ public class ServiceCallClientStreaming implements Runnable {
 
     @Override
     public void run() {
+
         Empty[] empties = new Empty[Defaults.iterationsCount()];
         Arrays.fill(empties, Empty.newBuilder().build());
         Stream.of(empties).forEach(emptyStreamObserver::onNext);
+
         emptyStreamObserver.onCompleted();
-        log.info("Completed");
+        try {
+            finishLatch.await();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("[{}] {}", toString(), summary);
     }
 
     @Override
@@ -80,3 +96,4 @@ public class ServiceCallClientStreaming implements Runnable {
         return "job-" + jobId;
     }
 }
+
