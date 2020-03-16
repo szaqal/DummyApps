@@ -27,12 +27,15 @@ public class App {
 
     ExecutorService workerExecutor = Threads.buildWorkerExecutor();
     for (int i = 1; i < Defaults.threadCount() +1; i++) {
-      //Runnable caller = getBlockingServiceWorker(channel, i);
+      Runnable caller = null;
+      switch (Defaults.callerType()) {
+        case "blocking": caller = getBlockingServiceWorker(channel, i); break;
+        case "stream": caller =  getClientStreamWorker(channel, i); break;
+        default: LOG.error("Unknown caller type {}" , Defaults.callerType()); break;
+      }
       //Runnable caller = getFutureServiceWorker(channel, i);
-      Runnable caller = getClientStreamWorker(channel, i);
-      //LOG.info("Submit Job [{}]", caller);
       workerExecutor.submit(caller);
-      Thread.sleep(2000/i);
+      Thread.sleep(10000/i);
     }
 
     try {

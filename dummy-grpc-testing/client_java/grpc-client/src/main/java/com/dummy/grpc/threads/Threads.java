@@ -23,7 +23,7 @@ public class Threads {
                 Defaults.threadPoolSize(),
                 Defaults.threadPoolSize(),
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(10),
+                new LinkedBlockingQueue<>(Defaults.threadPoolQueue()),
                 factory);
         executor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             @Override
