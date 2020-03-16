@@ -16,7 +16,6 @@ public class Defaults {
     return Integer.parseInt(Optional.ofNullable(System.getenv("WORKER_POOL_SIZE")).orElse("25"));
   }
 
-
   public static final int iterationsCount() {
     return Integer.parseInt(Optional.ofNullable(System.getenv("ITERATIONS_COUNT")).orElse("15"));
   }
