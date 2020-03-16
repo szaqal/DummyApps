@@ -1,0 +1,6 @@
+#!/bin/bash 
+
+export ITERATIONS_COUNT=50
+export THREAD_POOL_SIZE=5
+export WORKER_POOL_SIZE=100
+export THREAD_POOL_QUEUE=100

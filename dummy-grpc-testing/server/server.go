@@ -46,7 +46,7 @@ func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamS
 }
 
 func generateMessage(multiplier int) []byte {
-	token := make([]byte, multiplier*1000000) //1MB*x
+	token := make([]byte, multiplier*1048576) //1MB*x
 	rand.Read(token)
 	return token
 }
