@@ -1,4 +1,4 @@
-package com.dummy.grpc.workers;
+package com.dummy.grpc.workers.block;
 
 import com.dummy.grpc.Defaults;
 import com.google.common.primitives.Bytes;
@@ -51,9 +51,7 @@ public abstract class BaseServiceCallWorker implements Runnable {
     private long encryptData(byte[] data) {
         long start = System.currentTimeMillis();
         binaryEncryptor.setPassword("pass");
-        for (int i = 0; i < 5; i++) {
-            binaryEncryptor.encrypt(data);
-        }
+        binaryEncryptor.encrypt(data);
         return System.currentTimeMillis() - start;
     }
 }

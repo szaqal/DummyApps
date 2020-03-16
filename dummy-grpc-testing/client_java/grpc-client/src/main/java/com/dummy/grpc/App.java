@@ -2,8 +2,8 @@ package com.dummy.grpc;
 
 
 import com.dummy.grpc.threads.Threads;
-import com.dummy.grpc.workers.ServiceCallBlockingWorker;
-import com.dummy.grpc.workers.ServiceCallClientStreaming;
+import com.dummy.grpc.workers.block.ServiceCallBlockingWorker;
+import com.dummy.grpc.workers.stream.ServiceCallClientStreaming;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -26,9 +26,9 @@ public class App {
 
     ExecutorService workerExecutor = Threads.buildWorkerExecutor();
     for (int i = 1; i < Defaults.threadCount() +1; i++) {
-      Runnable caller = getBlockingServiceWorker(channel, i);
+      //Runnable caller = getBlockingServiceWorker(channel, i);
       //Runnable caller = getFutureServiceWorker(channel, i);
-      //Runnable caller = getClientStream(channel, i);
+      Runnable caller = getClientStream(channel, i);
       LOG.info("Submit Job [{}]", caller);
       workerExecutor.submit(caller);
       Thread.sleep(5000/i);

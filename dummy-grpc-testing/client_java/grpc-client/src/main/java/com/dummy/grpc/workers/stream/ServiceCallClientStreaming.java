@@ -1,4 +1,4 @@
-package com.dummy.grpc.workers;
+package com.dummy.grpc.workers.stream;
 
 import com.dummy.grpc.Defaults;
 import com.dummy.grpc.DelayServiceGrpc;
@@ -59,9 +59,7 @@ public class ServiceCallClientStreaming implements Runnable {
             private long encryptData(byte[] data) {
                 long start = System.currentTimeMillis();
                 binaryEncryptor.setPassword("pass");
-                for (int i = 0; i < 5; i++) {
-                    binaryEncryptor.encrypt(data);
-                }
+                binaryEncryptor.encrypt(data);
                 return System.currentTimeMillis() - start;
             }
         });
@@ -74,6 +72,7 @@ public class ServiceCallClientStreaming implements Runnable {
         Arrays.fill(empties, Empty.newBuilder().build());
         Stream.of(empties).forEach(emptyStreamObserver::onNext);
         emptyStreamObserver.onCompleted();
+        log.info("Completed");
     }
 
     @Override

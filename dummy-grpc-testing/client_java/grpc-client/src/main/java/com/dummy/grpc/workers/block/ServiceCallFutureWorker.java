@@ -1,4 +1,4 @@
-package com.dummy.grpc.workers;
+package com.dummy.grpc.workers.block;
 
 import com.dummy.grpc.DelayServiceGrpc;
 import com.google.protobuf.Empty;
