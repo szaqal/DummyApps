@@ -47,6 +47,7 @@ func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamS
 
 func (s *server) PerformBiStream(stream pb.DelayService_PerformBiStreamServer) error {
 	for {
+		timeStamp := time.Now()
 		_, err := stream.Recv()
 
 		if err == io.EOF {
@@ -55,6 +56,7 @@ func (s *server) PerformBiStream(stream pb.DelayService_PerformBiStreamServer) e
 		if err != nil {
 			return err
 		}
+		log.Printf("Request Served in: %s | %d client requests", time.Since(timeStamp), 1)
 		if err := stream.Send(&pb.ServiceResponse{Message: generateMessage(1)}); err != nil {
 			return err
 		}
@@ -62,7 +64,8 @@ func (s *server) PerformBiStream(stream pb.DelayService_PerformBiStreamServer) e
 }
 
 func generateMessage(multiplier int) []byte {
-	token := make([]byte, multiplier*1048576) //1MB*x
+	//1048576 1MB
+	token := make([]byte, multiplier*1048576)
 	rand.Read(token)
 	return token
 }

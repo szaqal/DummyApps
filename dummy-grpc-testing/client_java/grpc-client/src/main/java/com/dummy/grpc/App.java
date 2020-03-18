@@ -2,6 +2,7 @@ package com.dummy.grpc;
 
 
 import com.dummy.grpc.threads.Threads;
+import com.dummy.grpc.workers.bistream.BiStreamWorker;
 import com.dummy.grpc.workers.block.ServiceCallBlockingWorker;
 import com.dummy.grpc.workers.stream.ClientStreamingWorker;
 import com.dummy.grpc.workers.stream.StreamingSingleRequestWorker;
@@ -33,6 +34,7 @@ public class App {
         case "blocking": caller = getBlockingServiceWorker(channel, i); break;
         case "stream": caller =  getClientStreamWorker(channel, i); break;
         case "streamsingle": caller = getServiceCallClientStreamingSingleRequest(channel, i); break;
+        case "bistream": caller = getBiStreamWorker(channel, i); break;
         default: LOG.error("Unknown caller type {}" , Defaults.callerType()); break;
       }
       //Runnable caller = getFutureServiceWorker(channel, i);
@@ -51,6 +53,11 @@ public class App {
 
   private static Runnable getBlockingServiceWorker(ManagedChannel managedChannel, int jobId) {
     return new ServiceCallBlockingWorker(jobId, managedChannel);
+  }
+
+
+  private static Runnable getBiStreamWorker(ManagedChannel managedChannel, int jobId) {
+    return new BiStreamWorker(jobId, managedChannel);
   }
 
   private static Runnable getFutureServiceWorker(ManagedChannel managedChannel, int jobId) {
