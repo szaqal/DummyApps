@@ -71,19 +71,20 @@ func init() {
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 189 bytes of a gzipped FileDescriptorProto
+	// 202 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
 	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x87, 0x72, 0xa5, 0xa4, 0xd3,
 	0xf3, 0xf3, 0xd3, 0x73, 0x52, 0xf5, 0xc1, 0xc2, 0x49, 0xa5, 0x69, 0xfa, 0xa9, 0xb9, 0x05, 0x25,
 	0x95, 0x10, 0x55, 0x4a, 0xda, 0x5c, 0xfc, 0xc1, 0x10, 0x75, 0x41, 0xa9, 0xc5, 0x05, 0xf9, 0x79,
 	0xc5, 0xa9, 0x42, 0x12, 0x5c, 0xec, 0xb9, 0xa9, 0xc5, 0xc5, 0x89, 0xe9, 0xa9, 0x12, 0x8c, 0x0a,
-	0x8c, 0x1a, 0x3c, 0x41, 0x30, 0xae, 0xd1, 0x2c, 0x46, 0x2e, 0x1e, 0x97, 0xd4, 0x9c, 0xc4, 0x4a,
+	0x8c, 0x1a, 0x3c, 0x41, 0x30, 0xae, 0xd1, 0x53, 0x46, 0x2e, 0x1e, 0x97, 0xd4, 0x9c, 0xc4, 0x4a,
 	0xa8, 0x16, 0x21, 0x5b, 0x2e, 0xf6, 0x82, 0xd4, 0xa2, 0xb4, 0xfc, 0xa2, 0x5c, 0x21, 0x31, 0x3d,
 	0x88, 0x35, 0x7a, 0x30, 0x6b, 0xf4, 0x5c, 0x41, 0xd6, 0x48, 0x49, 0xe8, 0xc1, 0x9c, 0x85, 0x66,
 	0x8f, 0x12, 0x83, 0x90, 0x37, 0x97, 0x30, 0x54, 0xbb, 0x73, 0x4e, 0x66, 0x6a, 0x5e, 0x49, 0x70,
-	0x49, 0x51, 0x6a, 0x22, 0x59, 0x46, 0x69, 0x30, 0x3a, 0x09, 0x70, 0xf1, 0x25, 0xe7, 0xe7, 0xea,
-	0xa5, 0x94, 0xe6, 0xe6, 0x56, 0xea, 0xa5, 0x17, 0x15, 0x24, 0x27, 0xb1, 0x81, 0xf5, 0x1b, 0x03,
-	0x02, 0x00, 0x00, 0xff, 0xff, 0x48, 0x9f, 0x8f, 0xf0, 0x19, 0x01, 0x00, 0x00,
+	0x49, 0x51, 0x6a, 0x22, 0x59, 0x46, 0x69, 0x30, 0x0a, 0x79, 0x72, 0xf1, 0x43, 0x0d, 0x73, 0xca,
+	0xa4, 0xc4, 0x20, 0x03, 0x46, 0x27, 0x01, 0x2e, 0xbe, 0xe4, 0xfc, 0x5c, 0xbd, 0x94, 0xd2, 0xdc,
+	0xdc, 0x4a, 0xbd, 0xf4, 0xa2, 0x82, 0xe4, 0x24, 0x36, 0xb0, 0x09, 0xc6, 0x80, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x68, 0x45, 0x92, 0xb9, 0x64, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -100,6 +101,7 @@ const _ = grpc.SupportPackageIsVersion4
 type DelayServiceClient interface {
 	Perform(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ServiceResponse, error)
 	PerformClientStream(ctx context.Context, opts ...grpc.CallOption) (DelayService_PerformClientStreamClient, error)
+	PerformBiStream(ctx context.Context, opts ...grpc.CallOption) (DelayService_PerformBiStreamClient, error)
 }
 
 type delayServiceClient struct {
@@ -153,10 +155,42 @@ func (x *delayServicePerformClientStreamClient) CloseAndRecv() (*ServiceResponse
 	return m, nil
 }
 
+func (c *delayServiceClient) PerformBiStream(ctx context.Context, opts ...grpc.CallOption) (DelayService_PerformBiStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_DelayService_serviceDesc.Streams[1], "/service.DelayService/performBiStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &delayServicePerformBiStreamClient{stream}
+	return x, nil
+}
+
+type DelayService_PerformBiStreamClient interface {
+	Send(*empty.Empty) error
+	Recv() (*ServiceResponse, error)
+	grpc.ClientStream
+}
+
+type delayServicePerformBiStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *delayServicePerformBiStreamClient) Send(m *empty.Empty) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *delayServicePerformBiStreamClient) Recv() (*ServiceResponse, error) {
+	m := new(ServiceResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // DelayServiceServer is the server API for DelayService service.
 type DelayServiceServer interface {
 	Perform(context.Context, *empty.Empty) (*ServiceResponse, error)
 	PerformClientStream(DelayService_PerformClientStreamServer) error
+	PerformBiStream(DelayService_PerformBiStreamServer) error
 }
 
 // UnimplementedDelayServiceServer can be embedded to have forward compatible implementations.
@@ -168,6 +202,9 @@ func (*UnimplementedDelayServiceServer) Perform(ctx context.Context, req *empty.
 }
 func (*UnimplementedDelayServiceServer) PerformClientStream(srv DelayService_PerformClientStreamServer) error {
 	return status.Errorf(codes.Unimplemented, "method PerformClientStream not implemented")
+}
+func (*UnimplementedDelayServiceServer) PerformBiStream(srv DelayService_PerformBiStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method PerformBiStream not implemented")
 }
 
 func RegisterDelayServiceServer(s *grpc.Server, srv DelayServiceServer) {
@@ -218,6 +255,32 @@ func (x *delayServicePerformClientStreamServer) Recv() (*empty.Empty, error) {
 	return m, nil
 }
 
+func _DelayService_PerformBiStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(DelayServiceServer).PerformBiStream(&delayServicePerformBiStreamServer{stream})
+}
+
+type DelayService_PerformBiStreamServer interface {
+	Send(*ServiceResponse) error
+	Recv() (*empty.Empty, error)
+	grpc.ServerStream
+}
+
+type delayServicePerformBiStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *delayServicePerformBiStreamServer) Send(m *ServiceResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *delayServicePerformBiStreamServer) Recv() (*empty.Empty, error) {
+	m := new(empty.Empty)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 var _DelayService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "service.DelayService",
 	HandlerType: (*DelayServiceServer)(nil),
@@ -231,6 +294,12 @@ var _DelayService_serviceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "performClientStream",
 			Handler:       _DelayService_PerformClientStream_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "performBiStream",
+			Handler:       _DelayService_PerformBiStream_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

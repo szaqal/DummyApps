@@ -3,8 +3,8 @@ package com.dummy.grpc;
 
 import com.dummy.grpc.threads.Threads;
 import com.dummy.grpc.workers.block.ServiceCallBlockingWorker;
-import com.dummy.grpc.workers.stream.ServiceCallClientStreaming;
-import com.dummy.grpc.workers.stream.ServiceCallClientStreamingSingleRequest;
+import com.dummy.grpc.workers.stream.ClientStreamingWorker;
+import com.dummy.grpc.workers.stream.StreamingSingleRequestWorker;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.slf4j.Logger;
@@ -58,10 +58,10 @@ public class App {
   }
 
   private static Runnable getClientStreamWorker(ManagedChannel managedChannel, int jobId) {
-    return new ServiceCallClientStreaming(jobId, managedChannel);
+    return new ClientStreamingWorker(jobId, managedChannel);
   }
 
   private static Runnable getServiceCallClientStreamingSingleRequest(ManagedChannel managedChannel, int jobId) {
-    return new ServiceCallClientStreamingSingleRequest(jobId, managedChannel);
+    return new StreamingSingleRequestWorker(jobId, managedChannel);
   }
 }

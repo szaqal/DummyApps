@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 import static com.dummy.grpc.Defaults.MEGABYTE;
 
-public class ServiceCallClientStreamingSingleRequest implements Runnable {
+public class StreamingSingleRequestWorker implements Runnable {
 
     private BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
 
@@ -35,7 +35,7 @@ public class ServiceCallClientStreamingSingleRequest implements Runnable {
 
     DelayServiceGrpc.DelayServiceStub delayServiceStub;
 
-    public ServiceCallClientStreamingSingleRequest(int jobId, ManagedChannel managedChannel) {
+    public StreamingSingleRequestWorker(int jobId, ManagedChannel managedChannel) {
         this.jobId = jobId;
         this.start = System.currentTimeMillis();
         delayServiceStub = DelayServiceGrpc.newStub(managedChannel);

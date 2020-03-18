@@ -45,6 +45,22 @@ func (s *server) PerformClientStream(stream pb.DelayService_PerformClientStreamS
 	}
 }
 
+func (s *server) PerformBiStream(stream pb.DelayService_PerformBiStreamServer) error {
+	for {
+		_, err := stream.Recv()
+
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		if err := stream.Send(&pb.ServiceResponse{Message: generateMessage(1)}); err != nil {
+			return err
+		}
+	}
+}
+
 func generateMessage(multiplier int) []byte {
 	token := make([]byte, multiplier*1048576) //1MB*x
 	rand.Read(token)

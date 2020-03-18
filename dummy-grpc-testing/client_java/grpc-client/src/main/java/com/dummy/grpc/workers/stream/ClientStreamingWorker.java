@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import static com.dummy.grpc.Defaults.MEGABYTE;
 
-public class ServiceCallClientStreaming implements Runnable {
+public class ClientStreamingWorker implements Runnable {
 
     private BasicBinaryEncryptor binaryEncryptor = new BasicBinaryEncryptor();
 
@@ -37,7 +37,7 @@ public class ServiceCallClientStreaming implements Runnable {
 
     StreamObserver<Empty> emptyStreamObserver ;
 
-    public ServiceCallClientStreaming(int jobId, ManagedChannel managedChannel) {
+    public ClientStreamingWorker(int jobId, ManagedChannel managedChannel) {
         this.jobId = jobId;
         this.start = System.currentTimeMillis();
 
